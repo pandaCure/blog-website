@@ -17,7 +17,7 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            欢迎大家!!
+            欢迎大家!!!
           </a>
         </header>
       </div>
