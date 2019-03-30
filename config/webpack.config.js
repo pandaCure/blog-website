@@ -23,32 +23,7 @@ const getClientEnvironment = require('./env');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
-const DashboardPlugin = require('webpack-dashboard/plugin');
-const bundleConfig = require('./bundle-config.json');
-// const HappyPack = require('happypack')
-const os = require('os');
-// const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
-const threadLoader = require('thread-loader');
-const workerPool = {
-  workers: os.cpus().length,
-  workerParallelJobs: 50,
-  workerNodeArgs: ['--max-old-space-size=4096'],
-  poolRespawn: false,
-  poolTimeout: Infinity,
-  poolParallelJobs: 2,
-  name: 'my-pool'
-};
-// const workerPoolSass = {
-//   workers: os.cpus().length,
-//   workerParallelJobs: 2,
-//   workerNodeArgs: ['--max-old-space-size=4096'],
-//   poolRespawn: false,
-//   poolTimeout: Infinity,
-//   poolParallelJobs: 2,
-//   name: 'my-pool1'
-// }
-threadLoader.warmup(workerPool, ['babel-loader']);
-// threadLoader.warmup(workerPoolSass, ['sass-loader', 'css-loader'])
+
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -290,7 +265,6 @@ module.exports = function(webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
-        mobx: __dirname + "/node_modules/mobx/lib/mobx.es6.js"
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -327,7 +301,7 @@ module.exports = function(webpackEnv) {
               options: {
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
-
+                
               },
               loader: require.resolve('eslint-loader'),
             },
@@ -355,39 +329,31 @@ module.exports = function(webpackEnv) {
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
               include: paths.appSrc,
-              use: [
-                {
-                  loader: 'thread-loader',
-                  options: workerPool
-                },
-                {
-                  loader: require.resolve('babel-loader'),
-                  options: {
-                    customize: require.resolve(
-                        'babel-preset-react-app/webpack-overrides'
-                    ),
-
-                    plugins: [
-                      [
-                        require.resolve('babel-plugin-named-asset-import'),
-                        {
-                          loaderMap: {
-                            svg: {
-                              ReactComponent: '@svgr/webpack?-svgo,+ref![path]',
-                            },
-                          },
+              loader: require.resolve('babel-loader'),
+              options: {
+                customize: require.resolve(
+                  'babel-preset-react-app/webpack-overrides'
+                ),
+                
+                plugins: [
+                  [
+                    require.resolve('babel-plugin-named-asset-import'),
+                    {
+                      loaderMap: {
+                        svg: {
+                          ReactComponent: '@svgr/webpack?-svgo,+ref![path]',
                         },
-                      ],
-                    ],
-                    // This is a feature of `babel-loader` for webpack (not Babel itself).
-                    // It enables caching results in ./node_modules/.cache/babel-loader/
-                    // directory for faster rebuilds.
-                    cacheDirectory: true,
-                    cacheCompression: isEnvProduction,
-                    compact: isEnvProduction,
-                  }
-                }
-              ]
+                      },
+                    },
+                  ],
+                ],
+                // This is a feature of `babel-loader` for webpack (not Babel itself).
+                // It enables caching results in ./node_modules/.cache/babel-loader/
+                // directory for faster rebuilds.
+                cacheDirectory: true,
+                cacheCompression: isEnvProduction,
+                compact: isEnvProduction,
+              },
             },
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
@@ -407,7 +373,7 @@ module.exports = function(webpackEnv) {
                 ],
                 cacheDirectory: true,
                 cacheCompression: isEnvProduction,
-
+                
                 // If an error happens in a package, it's possible to be
                 // because it was compiled. Thus, we don't want the browser
                 // debugger to show the original code. Instead, the code
@@ -502,54 +468,13 @@ module.exports = function(webpackEnv) {
       ],
     },
     plugins: [
-      // 速度看着挺快  提升不大
-      // new HappyPack({
-      //   id: 'happyBabel',
-      //   loaders: [{
-      //     loader: require.resolve('babel-loader'),
-      //     options: {
-      //       customize: require.resolve(
-      //         'babel-preset-react-app/webpack-overrides'
-      //       ),
-      //
-      //       plugins: [
-      //         [
-      //           require.resolve('babel-plugin-named-asset-import'),
-      //           {
-      //             loaderMap: {
-      //               svg: {
-      //                 ReactComponent: '@svgr/webpack?-prettier,-svgo![path]'
-      //               }
-      //             }
-      //           }
-      //         ]
-      //       ],
-      //       // This is a feature of `babel-loader` for webpack (not Babel itself).
-      //       // It enables caching results in ./node_modules/.cache/babel-loader/
-      //       // directory for faster rebuilds.
-      //       cacheDirectory: true,
-      //       // Don't waste time on Gzipping the cache
-      //       cacheCompression: false
-      //     }
-      //   }],
-      //   threadPool: happyThreadPool,
-      //   verbose: true
-      // }),
       // Generates an `index.html` file with the <script> injected.
-      new webpack.DllReferencePlugin({
-        // 跟dll.config里面DllPlugin的context一致
-        context: process.cwd(),
-
-        // dll过程生成的manifest文件
-        manifest: require('./vendor-manifest.json')
-      }),
       new HtmlWebpackPlugin(
         Object.assign(
           {},
           {
             inject: true,
             template: paths.appHtml,
-            vendorJsName: bundleConfig.vendor.js
           },
           isEnvProduction
             ? {
@@ -596,7 +521,6 @@ module.exports = function(webpackEnv) {
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
       isEnvDevelopment && new CaseSensitivePathsPlugin(),
-      isEnvDevelopment ? new DashboardPlugin() : '',
       // If you require a missing module and then `npm install` it, you still have
       // to restart the development server for Webpack to discover it. This plugin
       // makes the discovery automatic so you don't have to restart.
