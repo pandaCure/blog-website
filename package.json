@@ -1,10 +1,11 @@
 {
-  "name": "a",
+  "name": "website-blog",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@babel/core": "7.2.2",
     "@svgr/webpack": "4.1.0",
+    "axios": "^0.18.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -32,6 +33,7 @@
     "jest-resolve": "23.6.0",
     "jest-watch-typeahead": "^0.2.1",
     "mini-css-extract-plugin": "0.5.0",
+    "mobx-react": "^5.4.3",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -42,6 +44,8 @@
     "react-app-polyfill": "^0.2.2",
     "react-dev-utils": "^8.0.0",
     "react-dom": "^16.8.6",
+    "react-ga": "^2.5.7",
+    "react-router-dom": "^5.0.0",
     "resolve": "1.10.0",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
@@ -55,7 +59,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "fix-standard": "node_modules/standard/bin/cmd.js --fix",
+    "standard": "node_modules/standard/bin/cmd.js --verbose | node_modules/snazzy/bin/cmd.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -107,13 +114,27 @@
       "node"
     ],
     "watchPlugins": [
-      "/Users/zhangfan/project/javascript/a/node_modules/jest-watch-typeahead/filename.js",
-      "/Users/zhangfan/project/javascript/a/node_modules/jest-watch-typeahead/testname.js"
+      "<rootDir>/node_modules/jest-watch-typeahead/filename.js",
+      "<rootDir>/node_modules/jest-watch-typeahead/testname.js"
     ]
   },
   "babel": {
     "presets": [
       "react-app"
+    ]
+  },
+  "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "snazzy": "^8.0.0",
+    "standard": "^12.0.1"
+  },
+  "pre-commit": [
+    "precommit-msg",
+    "standard"
+  ],
+  "standard": {
+    "globals": [
+      "fetch"
     ]
   }
 }
