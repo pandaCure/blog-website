@@ -9,9 +9,6 @@ import history from '@tools/history'
 import Layouts from './layouts/Layouts'
 import stores from './stores/index'
 import '@assets/styles/global.scss'
-const a = { b: 1 }
-const b = a?.b
-console.log(b)
 const reactGA = () => {
   ReactGA.initialize(GA)
   ReactGA.pageview(window.location.pathname + window.location.search)
