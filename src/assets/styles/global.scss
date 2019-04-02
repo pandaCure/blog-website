@@ -1,0 +1,94 @@
+// main
+@font-face {
+  font-family: 'Ubuntu';
+  src: url("https://yancey-assets.oss-cn-beijing.aliyuncs.com/font/Ubuntu-Regular.woff2");
+  font-display: swap;
+}
+
+// code tag
+@font-face {
+  font-family: "Operator Mono";
+  src: url("../../assets/fonts/Operator-Mono-Book-Regular.woff2");
+  font-display: swap;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  position: relative;
+}
+
+html,
+body {
+  cursor: url("../images/normal.cur"), auto;
+}
+
+.App {
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: rgba(#3a3a3a, .6);
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration: none;
+  outline: none;
+}
+
+.no-user-select {
+  user-select: none;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  background-color: rgba(#000, .6);
+}
+
+.clearfix::after {
+  content: ".";
+  clear: both;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1
+}
+
+@media screen and (max-width: 1920px) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
