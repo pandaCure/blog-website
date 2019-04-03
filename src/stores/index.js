@@ -1,9 +1,11 @@
 import layoutsStore from './layoutsStore'
 import articleStore from './articleStore'
+import homeStore from './homeStore'
 
 const stores = {
   layoutsStore,
-  articleStore
+  articleStore,
+  homeStore
 }
 
 export default stores
