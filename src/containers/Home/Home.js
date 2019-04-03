@@ -7,7 +7,7 @@ import routePath from '@constants/routePath'
 import svgIcons from '@assets/images/yancey-official-blog-svg-icons.svg'
 import styles from './Home.module.scss'
 import { socialMedia, webpSuffix, svgSprite } from '@constants/constants'
-// import PostSummary from '@components/Post/PostSummary/PostSummary'
+import PostSummary from '@components/Post/PostSummary/PostSummary'
 @inject('homeStore')
 @inject('articleStore')
 @observer
@@ -129,7 +129,7 @@ class Home extends React.Component {
               </svg>
               The Latest!
             </h2>
-            {/* <PostSummary /> */}
+            <PostSummary />
           </article>
           <article className={styles.show_more_btn_wrapper}>
             <Link to={routePath.blog}>More</Link>
